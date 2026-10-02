@@ -155,4 +155,30 @@
 </footer>
 
 </body>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  const SUPABASE_URL = "https://alzmxlecbcippeuysngj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_o8IWAmlgB_2BsFwMvJ3iHQ_qeYl-HvC";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    document.querySelector("button").addEventListener("click", async function () {
+      const groupName = document.getElementById("groupName").value.trim();
+      const adminEmail = document.getElementById("adminEmail").value.trim();
+      if (!groupName || !adminEmail) {
+        alert("Bitte gib einen Gruppennamen und deine E-Mail-Adresse ein.");
+      return;
+        }
+        const { data, error } = await supabaseClient
+          .from("groups")
+          .insert([{ name: groupName, admin_email: adminEmail }])
+          .select()
+          .single();
+      if (error) {
+        alert("Fehler beim Erstellen der Wichtelgruppe: " + error.message);
+        return;
+        }
+        alert("Wichtelgruppe wurde erfolgreich erstellt! 🎄");
+      });
+    
+    
+</script>
 </html>
