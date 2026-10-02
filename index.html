@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Weihnachtswichteln 2026</title>
 
   <style>
@@ -26,16 +27,18 @@
 
     header h1 {
       font-size: 42px;
-      margin: 0;
+      margin: 0 0 10px;
     }
 
     header p {
       font-size: 19px;
+      margin: 10px 0;
     }
 
     .snow {
       font-size: 30px;
       letter-spacing: 10px;
+      margin-bottom: 15px;
     }
 
     .card {
@@ -45,12 +48,13 @@
       margin: 20px auto 50px;
       padding: 35px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
 
     h2 {
       color: #a31515;
       text-align: center;
+      margin-top: 0;
     }
 
     label {
@@ -66,6 +70,11 @@
       border: 1px solid #bbb;
       border-radius: 8px;
       font-size: 16px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #19733b;
     }
 
     button {
@@ -86,7 +95,7 @@
     }
 
     button:disabled {
-      opacity: 0.6;
+      opacity: 0.65;
       cursor: wait;
     }
 
@@ -103,6 +112,10 @@
       text-align: center;
     }
 
+    .join h2 {
+      margin-bottom: 10px;
+    }
+
     footer {
       color: white;
       text-align: center;
@@ -113,140 +126,318 @@
 
 <body>
 
-<header>
-  <div class="snow">❄️ 🎄 ❄️ 🎁 ❄️</div>
-  <h1>Weihnachtswichteln 2026</h1>
-  <p>Gemeinsam wichteln, überraschen und Freude schenken.</p>
-</header>
+  <header>
+    <div class="snow">❄️ 🎄 ❄️ 🎁 ❄️</div>
 
-<div class="card">
+    <h1>Weihnachtswichteln 2026</h1>
 
-  <h2>🎅 Neue Wichtelgruppe erstellen</h2>
-
-  <label for="groupName">Name der Wichtelgruppe</label>
-  <input
-    id="groupName"
-    type="text"
-    placeholder="z. B. Familie Weihnachten 2026"
-  >
-
-  <label for="adminEmail">Deine E-Mail-Adresse</label>
-  <input
-    id="adminEmail"
-    type="email"
-    placeholder="name@beispiel.de"
-  >
-
-  <button id="createGroupButton" type="button">
-    🎄 Wichtelgruppe erstellen
-  </button>
-
-  <div class="divider">
-    ───────── oder ─────────
-  </div>
-
-  <div class="join">
-    <h2>🎁 Du wurdest eingeladen?</h2>
     <p>
-      Öffne einfach deinen persönlichen Einladungslink.
-      Dort kannst du dich für die Wichtelgruppe anmelden.
+      Gemeinsam wichteln, überraschen und Freude schenken.
     </p>
+  </header>
+
+
+  <div class="card">
+
+    <h2>🎅 Neue Wichtelgruppe erstellen</h2>
+
+    <label for="groupName">
+      Name der Wichtelgruppe
+    </label>
+
+    <input
+      id="groupName"
+      type="text"
+      placeholder="z. B. Familie Weihnachten 2026"
+      autocomplete="off"
+    >
+
+
+    <label for="adminEmail">
+      Deine E-Mail-Adresse
+    </label>
+
+    <input
+      id="adminEmail"
+      type="email"
+      placeholder="name@beispiel.de"
+      autocomplete="email"
+    >
+
+
+    <button
+      id="createGroupButton"
+      type="button"
+    >
+      🎄 Wichtelgruppe erstellen
+    </button>
+
+
+    <div class="divider">
+      ───────── oder ─────────
+    </div>
+
+
+    <div class="join">
+
+      <h2>🎁 Du wurdest eingeladen?</h2>
+
+      <p>
+        Öffne deinen persönlichen Einladungslink,
+        um dich für die Wichtelgruppe anzumelden.
+      </p>
+
+    </div>
+
   </div>
 
-</div>
 
-<footer>
-  ❤️ Frohe Weihnachten und viel Spaß beim Wichteln!
-</footer>
+  <footer>
+    ❤️ Frohe Weihnachten und viel Spaß beim Wichteln!
+  </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  const SUPABASE_URL =
-    "https://alzmxlecbcippeuysngj.supabase.co";
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  const SUPABASE_KEY =
-    "sb_publishable_o8IWAmlgB_2BsFwMvJ3iHQ_qeYl-HvC";
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+  <script>
 
-  const button =
-    document.getElementById("createGroupButton");
+    /*
+     * =====================================================
+     * SUPABASE VERBINDUNG
+     * =====================================================
+     */
 
-  button.addEventListener("click", async function () {
+    const SUPABASE_URL =
+      "https://alzmxlecbcippeuysngj.supabase.co";
 
-    const groupName =
-      document.getElementById("groupName").value.trim();
+    const SUPABASE_KEY =
+      "sb_publishable_o8IWAmlgB_2BsFwMvJ3iHQ_qeYl-HvC";
 
-    const adminEmail =
-      document.getElementById("adminEmail").value.trim();
 
-    if (!groupName || !adminEmail) {
-      alert(
-        "Bitte gib einen Gruppennamen und deine E-Mail-Adresse ein."
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
       );
-      return;
-    }
 
-    button.disabled = true;
-    button.textContent = "🎄 Gruppe wird erstellt ...";
 
-    const { data, error } =
-      await supabaseClient.rpc(
-        "create_wichtel_group",
-        {
-          p_name: groupName,
-          p_admin_email: adminEmail
+    /*
+     * =====================================================
+     * ELEMENTE DER SEITE
+     * =====================================================
+     */
+
+    const groupNameInput =
+      document.getElementById("groupName");
+
+    const adminEmailInput =
+      document.getElementById("adminEmail");
+
+    const createGroupButton =
+      document.getElementById("createGroupButton");
+
+
+    /*
+     * =====================================================
+     * WICHTELGRUPPE ERSTELLEN
+     * =====================================================
+     */
+
+    createGroupButton.addEventListener(
+      "click",
+      async function () {
+
+        const groupName =
+          groupNameInput.value.trim();
+
+        const adminEmail =
+          adminEmailInput.value.trim();
+
+
+        /*
+         * Eingaben prüfen
+         */
+
+        if (!groupName) {
+
+          alert(
+            "Bitte gib einen Namen für die Wichtelgruppe ein."
+          );
+
+          groupNameInput.focus();
+
+          return;
         }
-      );
 
-    if (error) {
-      console.error(error);
 
-      alert(
-        "Fehler beim Erstellen der Wichtelgruppe:\n\n" +
-        error.message
-      );
+        if (!adminEmail) {
 
-      button.disabled = false;
-      button.textContent = "🎄 Wichtelgruppe erstellen";
-      return;
-    }
+          alert(
+            "Bitte gib deine E-Mail-Adresse ein."
+          );
 
-    if (!data || !data.length) {
-      alert(
-        "Die Wichtelgruppe wurde erstellt, aber es wurde kein Einladungscode zurückgegeben."
-      );
+          adminEmailInput.focus();
 
-      button.disabled = false;
-      button.textContent = "🎄 Wichtelgruppe erstellen";
-      return;
-    }
+          return;
+        }
 
-    const group = data[0];
 
-    const inviteLink =
-      window.location.origin +
-      window.location.pathname +
-      "?invite=" +
-      encodeURIComponent(group.invite_code);
+        /*
+         * Button während der Verarbeitung deaktivieren
+         */
 
-    alert(
-      "🎉 Wichtelgruppe erfolgreich erstellt!\n\n" +
-      "Dein Einladungslink:\n\n" +
-      inviteLink +
-      "\n\n" +
-      "Diesen Link kannst du an deine Wichtelteilnehmer schicken."
+        createGroupButton.disabled = true;
+
+        createGroupButton.textContent =
+          "🎄 Gruppe wird erstellt ...";
+
+
+        try {
+
+          /*
+           * Unsere sichere Supabase-Funktion aufrufen
+           */
+
+          const { data, error } =
+            await supabaseClient.rpc(
+              "create_wichtel_group",
+              {
+                p_name: groupName,
+                p_admin_email: adminEmail
+              }
+            );
+
+
+          /*
+           * Supabase-Fehler
+           */
+
+          if (error) {
+
+            console.error(
+              "Supabase Fehler:",
+              error
+            );
+
+            alert(
+              "Die Wichtelgruppe konnte nicht erstellt werden.\n\n" +
+              error.message
+            );
+
+            return;
+          }
+
+
+          /*
+           * Prüfen, ob Supabase Daten zurückgegeben hat
+           */
+
+          if (
+            !data ||
+            !Array.isArray(data) ||
+            data.length === 0
+          ) {
+
+            alert(
+              "Die Wichtelgruppe wurde erstellt, " +
+              "aber es wurde kein Einladungscode zurückgegeben."
+            );
+
+            return;
+          }
+
+
+          /*
+           * Die neu erstellte Gruppe
+           */
+
+          const group = data[0];
+
+
+          /*
+           * Einladungscode prüfen
+           */
+
+          if (!group.invite_code) {
+
+            alert(
+              "Die Gruppe wurde erstellt, " +
+              "aber der Einladungscode fehlt."
+            );
+
+            return;
+          }
+
+
+          /*
+           * Persönlichen Einladungslink erstellen
+           */
+
+          const inviteLink =
+            window.location.origin +
+            window.location.pathname +
+            "?invite=" +
+            encodeURIComponent(
+              group.invite_code
+            );
+
+
+          /*
+           * Erfolgsnachricht
+           */
+
+          alert(
+            "🎉 Wichtelgruppe erfolgreich erstellt!\n\n" +
+
+            "Dein Einladungslink:\n\n" +
+
+            inviteLink +
+
+            "\n\n" +
+
+            "Diesen Link kannst du jetzt " +
+            "an deine Wichtelteilnehmer schicken."
+          );
+
+
+          /*
+           * Eingabefelder leeren
+           */
+
+          groupNameInput.value = "";
+          adminEmailInput.value = "";
+
+
+        } catch (err) {
+
+          console.error(
+            "Unerwarteter Fehler:",
+            err
+          );
+
+          alert(
+            "Es ist ein unerwarteter Fehler aufgetreten.\n\n" +
+            err.message
+          );
+
+        } finally {
+
+          /*
+           * Button wieder aktivieren
+           */
+
+          createGroupButton.disabled = false;
+
+          createGroupButton.textContent =
+            "🎄 Wichtelgruppe erstellen";
+        }
+
+      }
     );
 
-    button.disabled = false;
-    button.textContent = "🎄 Wichtelgruppe erstellen";
-  });
-</script>
+  </script>
 
 </body>
 </html>
