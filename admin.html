@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Wichteln 2026 – Verwaltung</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#b71c1c, #7f0000);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      padding: 40px 20px 25px;
+    }
+
+    header h1 {
+      margin: 10px 0;
+      font-size: 38px;
+    }
+
+    header p {
+      font-size: 18px;
+    }
+
+    .snow {
+      font-size: 30px;
+    }
+
+    .card {
+      width: 92%;
+      max-width: 800px;
+      margin: 20px auto 50px;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    h2 {
+      color: #a31515;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      background: #19733b;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #125b2e;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .danger {
+      background: #a31515;
+    }
+
+    .danger:hover {
+      background: #7d1010;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .info {
+      background: #f5f5f5;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .success {
+      background: #e8f5e9;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #f5f5f5;
+    }
+
+    .status {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    footer {
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 600px) {
+
+      .card {
+        padding: 20px;
+      }
+
+      header h1 {
+        font-size: 30px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="snow">
+    🎄 🎁 ❄️ 🎅 ❄️ 🎁 🎄
+  </div>
+
+  <h1>
+    Weihnachtswichteln 2026
+  </h1>
+
+  <p>
+    👑 Organisator-Bereich
+  </p>
+
+</header>
+
+
+<div class="card">
+
+  <!-- =============================== -->
+  <!-- LOGIN -->
+  <!-- =============================== -->
+
+  <section id="loginSection">
+
+    <h2>
+      🔐 Wichtelgruppe verwalten
+    </h2>
+
+    <p>
+      Gib die Gruppen-ID und deinen geheimen
+      Admin-Schlüssel ein.
+    </p>
+
+
+    <label for="groupId">
+      Gruppen-ID
+    </label>
+
+    <input
+      id="groupId"
+      type="number"
+      placeholder="z. B. 1"
+    >
+
+
+    <label for="adminToken">
+      Geheimer Admin-Schlüssel
+    </label>
+
+    <input
+      id="adminToken"
+      type="password"
+      placeholder="Admin-Schlüssel"
+    >
+
+
+    <button
+      id="loginButton"
+      type="button"
+    >
+      👑 Verwaltung öffnen
+    </button>
+
+
+    <div
+      id="loginError"
+      class="status"
+    ></div>
+
+  </section>
+
+
+  <!-- =============================== -->
+  <!-- VERWALTUNG -->
+  <!-- =============================== -->
+
+  <section
+    id="adminSection"
+    class="hidden"
+  >
+
+    <h2>
+      👑 Deine Wichtelgruppe
+    </h2>
+
+
+    <div class="info">
+
+      <strong>
+        Gruppen-ID:
+      </strong>
+
+      <span id="displayGroupId"></span>
+
+    </div>
+
+
+    <h2>
+      👥 Teilnehmer
+    </h2>
+
+
+    <div id="participantArea">
+
+      <p>
+        Teilnehmer werden geladen ...
+      </p>
+
+    </div>
+
+
+    <button
+      id="refreshButton"
+      type="button"
+    >
+      🔄 Teilnehmer aktualisieren
+    </button>
+
+
+    <button
+      id="drawButton"
+      class="danger"
+      type="button"
+    >
+      🎲 Wichtel auslosen
+    </button>
+
+
+    <div
+      id="drawResult"
+      class="success hidden"
+    ></div>
+
+  </section>
+
+</div>
+
+
+<footer>
+
+  ❤️ Frohe Weihnachten und viel Spaß beim Wichteln!
+
+</footer>
+
+
+<!-- =============================== -->
+<!-- SUPABASE -->
+<!-- =============================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+  /*
+   * ==========================================
+   * SUPABASE
+   * ==========================================
+   */
+
+  const SUPABASE_URL =
+    "https://alzmxlecbcippeuysngj.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_o8IWAmlgB_2BsFwMvJ3iHQ_qeYl-HvC";
+
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  /*
+   * ==========================================
+   * ELEMENTE
+   * ==========================================
+   */
+
+  const loginSection =
+    document.getElementById(
+      "loginSection"
+    );
+
+  const adminSection =
+    document.getElementById(
+      "adminSection"
+    );
+
+  const loginError =
+    document.getElementById(
+      "loginError"
+    );
+
+  const participantArea =
+    document.getElementById(
+      "participantArea"
+    );
+
+  const drawResult =
+    document.getElementById(
+      "drawResult"
+    );
+
+
+  /*
+   * ==========================================
+   * ADMIN-DATEN
+   * ==========================================
+   */
+
+  let currentGroupId = null;
+
+  let currentAdminToken = null;
+
+
+  /*
+   * ==========================================
+   * TEILNEHMER LADEN
+   * ==========================================
+   */
+
+  async function loadParticipants() {
+
+    participantArea.innerHTML =
+      "<p>Teilnehmer werden geladen ...</p>";
+
+
+    const { data, error } =
+      await supabaseClient.rpc(
+        "get_admin_participants",
+        {
+          p_group_id:
+            currentGroupId,
+
+          p_admin_token:
+            currentAdminToken
+        }
+      );
+
+
+    if (error) {
+
+      participantArea.innerHTML =
+        "<p>Fehler: " +
+        error.message +
+        "</p>";
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      participantArea.innerHTML =
+        "<p>Noch keine Teilnehmer angemeldet.</p>";
+
+      return;
+    }
+
+
+    let html =
+      "<table>" +
+
+      "<thead>" +
+
+      "<tr>" +
+
+      "<th>#</th>" +
+
+      "<th>Name</th>" +
+
+      "<th>E-Mail</th>" +
+
+      "</tr>" +
+
+      "</thead>" +
+
+      "<tbody>";
+
+
+    data.forEach(
+      function(participant, index) {
+
+        html +=
+          "<tr>" +
+
+          "<td>" +
+          (index + 1) +
+          "</td>" +
+
+          "<td>" +
+          escapeHtml(
+            participant.participant_name
+          ) +
+          "</td>" +
+
+          "<td>" +
+          escapeHtml(
+            participant.participant_email
+          ) +
+          "</td>" +
+
+          "</tr>";
+
+      }
+    );
+
+
+    html +=
+      "</tbody>" +
+      "</table>";
+
+
+    participantArea.innerHTML =
+      html;
+  }
+
+
+  /*
+   * ==========================================
+   * HTML SICHER AUSGEBEN
+   * ==========================================
+   */
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  /*
+   * ==========================================
+   * VERWALTUNG ÖFFNEN
+   * ==========================================
+   */
+
+  document
+    .getElementById("loginButton")
+    .addEventListener(
+      "click",
+      async function() {
+
+        const groupId =
+          document
+            .getElementById("groupId")
+            .value
+            .trim();
+
+        const adminToken =
+          document
+            .getElementById("adminToken")
+            .value
+            .trim();
+
+
+        loginError.textContent = "";
+
+
+        if (!groupId || !adminToken) {
+
+          loginError.textContent =
+            "Bitte beide Felder ausfüllen.";
+
+          return;
+        }
+
+
+        currentGroupId =
+          Number(groupId);
+
+        currentAdminToken =
+          adminToken;
+
+
+        await loadParticipants();
+
+
+        /*
+         * Wenn kein Fehler angezeigt wurde,
+         * Verwaltung anzeigen.
+         */
+
+        loginSection.classList.add(
+          "hidden"
+        );
+
+        adminSection.classList.remove(
+          "hidden"
+        );
+
+        document.getElementById(
+          "displayGroupId"
+        ).textContent =
+          currentGroupId;
+
+      }
+    );
+
+
+  /*
+   * ==========================================
+   * TEILNEHMER AKTUALISIEREN
+   * ==========================================
+   */
+
+  document
+    .getElementById("refreshButton")
+    .addEventListener(
+      "click",
+      loadParticipants
+    );
+
+
+  /*
+   * ==========================================
+   * AUSLOSUNG
+   * ==========================================
+   */
+
+  document
+    .getElementById("drawButton")
+    .addEventListener(
+      "click",
+      async function() {
+
+        const confirmation =
+          confirm(
+            "Möchtest du die Wichtel jetzt wirklich auslosen?\n\n" +
+            "Die Auslosung sollte erst gestartet werden, " +
+            "wenn alle Teilnehmer angemeldet sind."
+          );
+
+
+        if (!confirmation) {
+          return;
+        }
+
+
+        const button =
+          document.getElementById(
+            "drawButton"
+          );
+
+
+        button.disabled = true;
+
+        button.textContent =
+          "🎲 Auslosung läuft ...";
+
+
+        drawResult.classList.add(
+          "hidden"
+        );
+
+
+        try {
+
+          const { data, error } =
+            await supabaseClient.rpc(
+              "draw_secret_santa",
+              {
+                p_group_id:
+                  currentGroupId,
+
+                p_admin_token:
+                  currentAdminToken
+              }
+            );
+
+
+          if (error) {
+
+            alert(
+              "Die Auslosung konnte nicht durchgeführt werden.\n\n" +
+              error.message
+            );
+
+            return;
+          }
+
+
+          drawResult.classList.remove(
+            "hidden"
+          );
+
+
+          drawResult.innerHTML =
+            "<h2>🎉 Auslosung erfolgreich!</h2>" +
+            "<p>" +
+            "Die Wichtel wurden erfolgreich ausgelost. " +
+            "Jeder Teilnehmer kann nun über seinen persönlichen " +
+            "Link sehen, wen er gezogen hat." +
+            "</p>";
+
+
+          button.textContent =
+            "🎉 Auslosung abgeschlossen";
+
+
+        } catch (error) {
+
+          alert(
+            "Unerwarteter Fehler:\n\n" +
+            error.message
+          );
+
+        } finally {
+
+          button.disabled = true;
+
+        }
+
+      }
+    );
+
+</script>
+
+</body>
+</html>
