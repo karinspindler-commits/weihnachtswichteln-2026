@@ -85,6 +85,11 @@
       background: #125b2e;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
     .divider {
       text-align: center;
       margin: 30px 0;
@@ -132,7 +137,7 @@
     placeholder="name@beispiel.de"
   >
 
-  <button type="button">
+  <button id="createGroupButton" type="button">
     🎄 Wichtelgruppe erstellen
   </button>
 
@@ -154,63 +159,94 @@
   ❤️ Frohe Weihnachten und viel Spaß beim Wichteln!
 </footer>
 
-</body>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-  const SUPABASE_URL = "https://alzmxlecbcippeuysngj.supabase.co";
-const SUPABASE_KEY = "sb_publishable_o8IWAmlgB_2BsFwMvJ3iHQ_qeYl-HvC";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    document.querySelector("button").addEventListener("click", async function () {
-      const groupName = document.getElementById("groupName").value.trim();
-      const adminEmail = document.getElementById("adminEmail").value.trim();
-      if (!groupName || !adminEmail) {
-        alert("Bitte gib einen Gruppennamen und deine E-Mail-Adresse ein.");
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL =
+    "https://alzmxlecbcippeuysngj.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_o8IWAmlgB_2BsFwMvJ3iHQ_qeYl-HvC";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+  const button =
+    document.getElementById("createGroupButton");
+
+  button.addEventListener("click", async function () {
+
+    const groupName =
+      document.getElementById("groupName").value.trim();
+
+    const adminEmail =
+      document.getElementById("adminEmail").value.trim();
+
+    if (!groupName || !adminEmail) {
+      alert(
+        "Bitte gib einen Gruppennamen und deine E-Mail-Adresse ein."
+      );
       return;
+    }
+
+    button.disabled = true;
+    button.textContent = "🎄 Gruppe wird erstellt ...";
+
+    const { data, error } =
+      await supabaseClient.rpc(
+        "create_wichtel_group",
+        {
+          p_name: groupName,
+          p_admin_email: adminEmail
         }
-        const { data, error } = await supabaseClient.rpc(
-  "create_wichtel_group",
-  {
-    p_name: groupName,
-    p_admin_email: adminEmail
-  }
-);
+      );
 
-if (error) {
-  alert("Fehler beim Erstellen der Wichtelgruppe: " + error.message);
-  return;
-}
+    if (error) {
+      console.error(error);
 
-const group = data[0];
+      alert(
+        "Fehler beim Erstellen der Wichtelgruppe:\n\n" +
+        error.message
+      );
 
-const inviteLink =
-  window.location.origin +
-  window.location.pathname +
-  "?invite=" +
-  group.invite_code;
+      button.disabled = false;
+      button.textContent = "🎄 Wichtelgruppe erstellen";
+      return;
+    }
 
+    if (!data || !data.length) {
+      alert(
+        "Die Wichtelgruppe wurde erstellt, aber es wurde kein Einladungscode zurückgegeben."
+      );
 
-         
-          
-          
-      if (error) {
-        alert("Fehler beim Erstellen der Wichtelgruppe: " + error.message);
-        return;
-        }
-        const inviteLink =
-  window.location.origin +
-  window.location.pathname +
-  "?invite=" +
-  data.invite_code;
+      button.disabled = false;
+      button.textContent = "🎄 Wichtelgruppe erstellen";
+      return;
+    }
 
-alert(
-  "Wichtelgruppe wurde erfolgreich erstellt! 🎄\n\n" +
-  "Dein Einladungslink:\n" +
-  inviteLink
-);
-      });
-    
-    
+    const group = data[0];
+
+    const inviteLink =
+      window.location.origin +
+      window.location.pathname +
+      "?invite=" +
+      encodeURIComponent(group.invite_code);
+
+    alert(
+      "🎉 Wichtelgruppe erfolgreich erstellt!\n\n" +
+      "Dein Einladungslink:\n\n" +
+      inviteLink +
+      "\n\n" +
+      "Diesen Link kannst du an deine Wichtelteilnehmer schicken."
+    );
+
+    button.disabled = false;
+    button.textContent = "🎄 Wichtelgruppe erstellen";
+  });
 </script>
+
+</body>
 </html>
-
-
