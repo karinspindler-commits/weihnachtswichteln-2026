@@ -167,18 +167,49 @@ const SUPABASE_KEY = "sb_publishable_o8IWAmlgB_2BsFwMvJ3iHQ_qeYl-HvC";
         alert("Bitte gib einen Gruppennamen und deine E-Mail-Adresse ein.");
       return;
         }
-        const { data, error } = await supabaseClient
-          .from("groups")
-          .insert([{ name: groupName, admin_email: adminEmail }])
-          .select()
-          .single();
+        const { data, error } = await supabaseClient.rpc(
+  "create_wichtel_group",
+  {
+    p_name: groupName,
+    p_admin_email: adminEmail
+  }
+);
+
+if (error) {
+  alert("Fehler beim Erstellen der Wichtelgruppe: " + error.message);
+  return;
+}
+
+const group = data[0];
+
+const inviteLink =
+  window.location.origin +
+  window.location.pathname +
+  "?invite=" +
+  group.invite_code;
+
+
+         
+          
+          
       if (error) {
         alert("Fehler beim Erstellen der Wichtelgruppe: " + error.message);
         return;
         }
-        alert("Wichtelgruppe wurde erfolgreich erstellt! 🎄");
+        const inviteLink =
+  window.location.origin +
+  window.location.pathname +
+  "?invite=" +
+  data.invite_code;
+
+alert(
+  "Wichtelgruppe wurde erfolgreich erstellt! 🎄\n\n" +
+  "Dein Einladungslink:\n" +
+  inviteLink
+);
       });
     
     
 </script>
 </html>
+
